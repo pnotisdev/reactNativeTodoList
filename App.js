@@ -1,65 +1,76 @@
-import React, {useState, useRef, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, Animated, TouchableOpacity } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { Platform, StyleSheet, Text, View, TextInput, Animated, TouchableOpacity, Picker } from 'react-native';
 import Task from './components/Task';
 import { KeyboardAvoidingView } from 'react-native-web';
 
 export default function App() {
-    const [task, setTask] = useState();
-    const [taskItems, setTaskItems] = useState([]);
-    const animatedColor = useRef(new Animated.Value(0)).current;
+  const [task, setTask] = useState('');
+  const [priority, setPriority] = useState('medium'); // Default priority is medium
+  const [taskItems, setTaskItems] = useState([]);
+  const animatedColor = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-      // Configure the animated color transition
-      const colorAnimation = Animated.loop(
-        Animated.timing(animatedColor, {
-          toValue: 1,
-          duration: 20000, // Adjust the duration as needed
-          useNativeDriver: false,
-        })
-      );
-  
-      colorAnimation.start();
-  
-      return () => {
-        colorAnimation.stop();
-      };
-    }, [animatedColor]);
+  useEffect(() => {
+    const colorAnimation = Animated.loop(
+      Animated.timing(animatedColor, {
+        toValue: 1,
+        duration: 20000,
+        useNativeDriver: false,
+      })
+    );
 
-    const handleAddTask = () => {
-      setTaskItems([...taskItems, task])
-      setTask(null);
-    }
+    colorAnimation.start();
 
-    const completeTask = (index) => {
-      let itemsCopy = [...taskItems];
-      itemsCopy.splice(index, 1);
-      setTaskItems(itemsCopy);
-    }
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString();
+    return () => {
+      colorAnimation.stop();
+    };
+  }, [animatedColor]);
 
-    const backgroundColor = animatedColor.interpolate({
-      inputRange: [0, 0.33, 0.66, 1],
-      outputRange: ['#a3be8c', '#b48ead', '#88c0d0', '#a3be8c'],
-    });
+  const handleAddTask = () => {
+    setTaskItems([...taskItems, { text: task, priority }]);
+    setTask('');
+  };
+
+  const completeTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1);
+    setTaskItems(itemsCopy);
+  };
+
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+
+  const backgroundColor = animatedColor.interpolate({
+    inputRange: [0, 0.33, 0.66, 1],
+    outputRange: ['#a3be8c', '#b48ead', '#88c0d0', '#a3be8c'],
+  });
 
   return (
     <Animated.View style={[styles.container, { backgroundColor }]}>
       <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Todays tasks, {formattedDate}</Text>
+        <Text style={styles.sectionTitle}>Today's tasks, {formattedDate}</Text>
         <View style={styles.items}>
-          {
-          taskItems.map((item, index) => {
-            return (
-            <Task key={index} text={item} onPress={() => completeTask(index)} />
-          )
-        })
-        }
+          {taskItems.map((item, index) => (
+            <Task key={index} text={item.text} priority={item.priority} onPress={() => completeTask(index)} />
+          ))}
         </View>
-        </View>
+      </View>
 
-      <KeyboardAvoidingView behaviour={Platform.OS === "ios" ? "padding" : "height"} style={styles.writeTaskWrapper}>
-        <TextInput style={styles.input} placeholder={"What are todays tasks?"} value={task} onChangeText={text => setTask(text)}/>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.writeTaskWrapper}>
+        <TextInput
+          style={styles.input}
+          placeholder={"What are today's tasks?"}
+          value={task}
+          onChangeText={(text) => setTask(text)}
+        />
+        <Picker
+          selectedValue={priority}
+          style={styles.picker}
+          onValueChange={(itemValue) => setPriority(itemValue)}
+        >
+          <Picker.Item label="High" value="high" />
+          <Picker.Item label="Medium" value="medium" />
+          <Picker.Item label="Low" value="low" />
+        </Picker>
         <TouchableOpacity onPress={() => handleAddTask()}>
           <View style={styles.addWrapper}>
             <Text style={styles.addText}>+</Text>

@@ -1,8 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Task = (props) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high':
@@ -31,12 +33,26 @@ const Task = (props) => {
 
   return (
     <View style={[styles.item, { borderColor: getPriorityColor(props.priority) }]}>
-      <View style={styles.itemLeft}>
+      <View
+        style={styles.itemLeft}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <TouchableOpacity onPress={props.onPress}>
-          <View style={[styles.square, { backgroundColor: getPriorityColor(props.priority) }]}></View>
+          <View
+            style={[
+              styles.square,
+              { backgroundColor: getPriorityColor(props.priority), opacity: isHovered ? 1 : 0.8 },
+            ]}
+          ></View>
         </TouchableOpacity>
         <Text style={styles.itemText}>{props.text}</Text>
       </View>
+      {isHovered && (
+        <Text style={styles.tooltipText}>
+          Click to delete
+        </Text>
+      )}
       <MaterialIcons name={getCategoryIcon(props.category)} size={24} color={getPriorityColor(props.priority)} />
     </View>
   );
@@ -52,6 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
+    position: 'relative', // Required for positioning tooltip
   },
   itemLeft: {
     flexDirection: 'row',
@@ -61,12 +78,24 @@ const styles = StyleSheet.create({
   square: {
     width: 24,
     height: 24,
-    opacity: 0.8,
     borderRadius: 5,
     marginRight: 15,
+    ...(Platform.OS === 'web' && {
+      cursor: 'pointer',
+    }),
   },
   itemText: {
     maxWidth: '80%',
+  },
+  tooltipText: {
+    position: 'absolute',
+    top: 0,
+    right: '100%',
+    padding: 5,
+    backgroundColor: '#333',
+    color: '#fff',
+    borderRadius: 5,
+    zIndex: 1,
   },
 });
 

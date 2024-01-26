@@ -10,7 +10,7 @@ Preview: (Subject to change as i am currently building this app)
 How mine looks like:
 
 More things i want to add:
-
+0. fix bugs and clean up code as it's not good
 1. Simple database
 2. Notes tab
 3. calendar for notes/tasks so you can get notified

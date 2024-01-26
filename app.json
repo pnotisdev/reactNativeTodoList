@@ -21,5 +21,15 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "5282fa96-2869-4e3e-b0a4-1b2e56968b06"
+      }
+    },
+    "android": {
+      "package": "com.pnotisdev.reactnativetodolist"
+    }
+  }
 }

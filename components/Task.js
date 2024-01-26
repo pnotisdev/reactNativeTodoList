@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Task = (props) => {
@@ -38,14 +38,14 @@ const Task = (props) => {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <TouchableOpacity onPress={props.onPress}>
+        <Pressable onPress={props.onPress}>
           <View
             style={[
               styles.square,
               { backgroundColor: getPriorityColor(props.priority), opacity: isHovered ? 1 : 0.8 },
             ]}
           ></View>
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.itemText}>{props.text}</Text>
       </View>
       {isHovered && (

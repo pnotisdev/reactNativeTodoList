@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, Animated, TouchableOpacity, Picker, SafeAreaView, Modal, TouchableWithoutFeedback, } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, Animated, Pressable, Picker, SafeAreaView, Modal } from 'react-native';
 import Task from './components/Task';
 import { KeyboardAvoidingView } from 'react-native-web';
 
@@ -56,9 +56,9 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <Animated.View style={[styles.background, { backgroundColor }]}>
         <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setShowHelp(true)}>
+          <Pressable onPress={() => setShowHelp(true)}>
             <Text style={styles.helpButton}>?</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
         <View style={styles.tasksWrapper}>
           <Text style={styles.sectionTitle}>Today's tasks, {formattedDate}</Text>
@@ -89,24 +89,24 @@ export default function App() {
           </View>
         </View>
 
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.writeTaskWrapper}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'padding' : 'height'} style={styles.writeTaskWrapper}>
           <TextInput
             style={styles.input}
             placeholder={"What are today's tasks?"}
             value={task}
             onChangeText={(text) => setTask(text)}
           />
-          <TouchableOpacity onPress={() => handleAddTask()}>
+          <Pressable onPress={() => handleAddTask()}>
             <View style={styles.addWrapper}>
               <Text style={styles.addText}>+</Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         </KeyboardAvoidingView>
 
         <Modal transparent={true} visible={showHelp} animationType="slide">
-          <TouchableWithoutFeedback onPress={() => setShowHelp(false)}>
+          <Pressable onPress={() => setShowHelp(false)}>
             <View style={styles.modalOverlay}></View>
-          </TouchableWithoutFeedback>
+          </Pressable>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Help</Text>
             <Text style={styles.modalText}>
@@ -120,9 +120,9 @@ export default function App() {
               {'\n'}
               - For task categories: Personal, Work/School, Home.
             </Text>
-            <TouchableOpacity onPress={() => setShowHelp(false)}>
+            <Pressable onPress={() => setShowHelp(false)}>
               <Text style={styles.modalCloseButton}>Close</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </Modal>
       </Animated.View>

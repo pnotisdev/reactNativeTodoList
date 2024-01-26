@@ -1,7 +1,6 @@
-// Task.js
-
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Task = (props) => {
   const getPriorityColor = (priority) => {
@@ -17,6 +16,19 @@ const Task = (props) => {
     }
   };
 
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'personal':
+        return 'person';
+      case 'workSchool':
+        return 'work';
+      case 'home':
+        return 'home';
+      default:
+        return 'circle';
+    }
+  };
+
   return (
     <View style={[styles.item, { borderColor: getPriorityColor(props.priority) }]}>
       <View style={styles.itemLeft}>
@@ -25,6 +37,7 @@ const Task = (props) => {
         </TouchableOpacity>
         <Text style={styles.itemText}>{props.text}</Text>
       </View>
+      <MaterialIcons name={getCategoryIcon(props.category)} size={24} color={getPriorityColor(props.priority)} />
     </View>
   );
 };

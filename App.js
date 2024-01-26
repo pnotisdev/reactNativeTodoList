@@ -1,11 +1,22 @@
-import React, {useState} from 'react';
-import { Platform, StyleSheet, Text, View, TextInput } from 'react-native';
+import React, {useState, useRef, useEffect } from 'react';
+import { Platform, StyleSheet, Text, View, TextInput, Animated, TouchableOpacity } from 'react-native';
 import Task from './components/Task';
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native-web';
+import { KeyboardAvoidingView } from 'react-native-web';
 
 export default function App() {
     const [task, setTask] = useState();
     const [taskItems, setTaskItems] = useState([]);
+    const animatedColor = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+      // Configure the animated color transition
+      Animated.timing(animatedColor, {
+        toValue: 1,
+        duration: 5000, // Adjust the duration as needed
+        useNativeDriver: false,
+      }).start();
+    }, [animatedColor]);
+
     const handleAddTask = () => {
       setTaskItems([...taskItems, task])
       setTask(null);
@@ -18,8 +29,15 @@ export default function App() {
     }
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();
+
+  // Interpolate the animated color value
+  const backgroundColor = animatedColor.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['#a3be8c', '#b48ead', '#88c0d0'], // Adjust the colors as needed
+  });
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { backgroundColor }]}>
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>Todays tasks, {formattedDate}</Text>
         <View style={styles.items}>
@@ -41,14 +59,13 @@ export default function App() {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8EAED',
   },
   tasksWrapper: {
     paddingTop: 80,

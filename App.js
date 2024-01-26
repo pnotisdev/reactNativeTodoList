@@ -28,9 +28,15 @@ export default function App() {
   }, [animatedColor]);
 
   const handleAddTask = () => {
+    if (task.trim() === '') {
+      // Do nothing if the task is empty or contains only whitespace
+      return;
+    }
+  
     setTaskItems([...taskItems, { text: task, priority, category }]);
     setTask('');
   };
+  
 
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
@@ -222,7 +228,7 @@ const styles = StyleSheet.create({
   modalCloseButton: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#61dafb', // React Native Blue
+    color: '#a3be8c',
     marginTop: 10,
   },
   Text:{}

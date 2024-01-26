@@ -24,16 +24,14 @@ export default function App() {
         <Text style={styles.sectionTitle}>Todays tasks, {formattedDate}</Text>
         <View style={styles.items}>
           {
-            taskItems.map((item, index) => {
-              return (
-                <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                  <Task text={item} />
-                </TouchableOpacity>
-              )
-            })
-          }
+          taskItems.map((item, index) => {
+            return (
+            <Task key={index} text={item} onPress={() => completeTask(index)} />
+          )
+        })
+        }
         </View>
-      </View>
+        </View>
 
       <KeyboardAvoidingView behaviour={Platform.OS === "ios" ? "padding" : "height"} style={styles.writeTaskWrapper}>
         <TextInput style={styles.input} placeholder={"What are todays tasks?"} value={task} onChangeText={text => setTask(text)}/>

@@ -10,11 +10,19 @@ export default function App() {
 
     useEffect(() => {
       // Configure the animated color transition
-      Animated.timing(animatedColor, {
-        toValue: 1,
-        duration: 5000, // Adjust the duration as needed
-        useNativeDriver: false,
-      }).start();
+      const colorAnimation = Animated.loop(
+        Animated.timing(animatedColor, {
+          toValue: 1,
+          duration: 20000, // Adjust the duration as needed
+          useNativeDriver: false,
+        })
+      );
+  
+      colorAnimation.start();
+  
+      return () => {
+        colorAnimation.stop();
+      };
     }, [animatedColor]);
 
     const handleAddTask = () => {
@@ -30,11 +38,10 @@ export default function App() {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();
 
-  // Interpolate the animated color value
-  const backgroundColor = animatedColor.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['#a3be8c', '#b48ead', '#88c0d0'], // Adjust the colors as needed
-  });
+    const backgroundColor = animatedColor.interpolate({
+      inputRange: [0, 0.33, 0.66, 1],
+      outputRange: ['#a3be8c', '#b48ead', '#88c0d0', '#a3be8c'],
+    });
 
   return (
     <Animated.View style={[styles.container, { backgroundColor }]}>
